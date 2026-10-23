@@ -1,6 +1,6 @@
-# __NAME__
+# terraform-aws-static-site
 
-__DESCRIPTION__
+Static website on CloudFront with a private S3 origin behind Origin Access Control, HTTPS-only, SPA fallback
 
 ## Opinions
 
@@ -10,7 +10,7 @@ __DESCRIPTION__
 
 ```hcl
 module "this" {
-  source = "git::https://github.com/Olensys/__NAME__.git?ref=v1.0.0"
+  source = "git::https://github.com/Olensys/terraform-aws-static-site.git?ref=v1.0.0"
 
   name = "example"
   context = {
