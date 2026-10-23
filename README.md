@@ -13,6 +13,7 @@ Static website on CloudFront with a private S3 origin behind Origin Access Contr
 - `functions` become published `cloudfront-js-2.0` functions, attached at most one per `viewer-request` or `viewer-response`.
 - `price_class` defaults to `PriceClass_100`; `web_acl_arn` and `logging_bucket` (bucket domain name) are optional.
 - The certificate must be in `us-east-1`: pass the `terraform-aws-acm-certificate` output, created with an aliased `us-east-1` provider.
+- The origin access control and the cache policy are both named `name`; CloudFront names these account-global, so `name` must be unique per account.
 - DNS is the consumer's job: point a CNAME for each of `domain_names` at the `domain_name` output with `terraform-cloudflare-dns` or Route53.
 
 ## Usage
@@ -47,7 +48,7 @@ module "this" {
 
 | Name | Version |
 | ---- | ------- |
-| <a name="provider_aws"></a> [aws](#provider\_aws) | >= 6.0, < 7.0 |
+| <a name="provider_aws"></a> [aws](#provider\_aws) | 6.70.0 |
 
 ## Modules
 
@@ -95,7 +96,7 @@ module "this" {
 | <a name="output_hosted_zone_id"></a> [hosted\_zone\_id](#output\_hosted\_zone\_id) | Route 53 hosted zone ID of CloudFront, for alias records. Null when create is false. |
 | <a name="output_id"></a> [id](#output\_id) | ID of the CloudFront distribution. Null when create is false. |
 | <a name="output_name"></a> [name](#output\_name) | Name of the site (also the bucket name). Null when create is false. |
-| <a name="output_origin_access_control_enabled"></a> [origin\_access\_control\_enabled](#output\_origin\_access\_control\_enabled) | Whether the origin is protected by origin access control (always true when created). Null when create is false. |
+| <a name="output_origin_access_control_enabled"></a> [origin\_access\_control\_enabled](#output\_origin\_access\_control\_enabled) | Whether the origin is protected by origin access control: true when created, false when create is false (no access control is created then). |
 | <a name="output_tags"></a> [tags](#output\_tags) | Tags applied to every taggable resource, with context.extra\_tags merged in. Null when create is false. |
 | <a name="output_viewer_protocol_policy"></a> [viewer\_protocol\_policy](#output\_viewer\_protocol\_policy) | Viewer protocol policy of the default cache behavior. Null when create is false. |
 <!-- END_TF_DOCS -->

@@ -39,8 +39,8 @@ output "tags" {
 }
 
 output "origin_access_control_enabled" {
-  description = "Whether the origin is protected by origin access control (always true when created). Null when create is false."
-  value       = var.create ? length(local.origin_access_control) > 0 : null
+  description = "Whether the origin is protected by origin access control: true when created, false when create is false (no access control is created then)."
+  value       = length(local.origin_access_control) > 0
 }
 
 output "viewer_protocol_policy" {

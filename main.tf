@@ -6,7 +6,8 @@ locals {
 
   origin_id = "s3"
 
-  origin_access_control = {
+  # Upstream creates these regardless of its own create flag, so gate here.
+  origin_access_control = var.create ? {
     s3 = {
       description      = "Origin access control for ${var.name}"
       name             = var.name
@@ -14,7 +15,7 @@ locals {
       signing_behavior = "always"
       signing_protocol = "sigv4"
     }
-  }
+  } : {}
 
   viewer_protocol_policy = "redirect-to-https"
 
@@ -144,7 +145,7 @@ module "this" {
     cache_policy_id        = var.create ? aws_cloudfront_cache_policy.this[0].id : null
 
     function_association = {
-      for k, f in var.functions : f.event_type => {
+      for k, f in(var.create ? var.functions : {}) : f.event_type => {
         event_type   = f.event_type
         function_arn = aws_cloudfront_function.this[k].arn
       }

@@ -114,7 +114,7 @@ run "test_create_false_plans_nothing" {
     condition = alltrue([
       output.id == null, output.name == null, output.arn == null, output.domain_name == null,
       output.hosted_zone_id == null, output.bucket_name == null, output.bucket_arn == null,
-      output.tags == null, output.origin_access_control_enabled == null,
+      output.tags == null, output.origin_access_control_enabled == false,
       output.viewer_protocol_policy == null, output.custom_error_responses == null,
       output.bucket_policy_json == null,
     ])
@@ -128,6 +128,7 @@ run "test_create_false_plans_nothing" {
 }
 
 run "test_function_association" {
+  # SMOKE: asserts the root function resource settings only; the association on the distribution is proven by complete.tftest.hcl.
   command = plan
 
   variables {
@@ -139,6 +140,35 @@ run "test_function_association" {
   assert {
     condition     = aws_cloudfront_function.this["rewrite"].runtime == "cloudfront-js-2.0" && aws_cloudfront_function.this["rewrite"].publish == true
     error_message = "Functions must use cloudfront-js-2.0 and be published."
+  }
+}
+
+run "test_create_false_passes_no_oac" {
+  command = plan
+
+  variables {
+    create = false
+  }
+
+  assert {
+    condition     = output.origin_access_control_enabled == false
+    error_message = "No origin access control may be passed to the distribution when create is false."
+  }
+}
+
+run "test_create_false_with_functions" {
+  command = plan
+
+  variables {
+    create = false
+    functions = {
+      rewrite = { event_type = "viewer-request", code = "function handler(event) { return event.request; }" }
+    }
+  }
+
+  assert {
+    condition     = length(aws_cloudfront_function.this) == 0 && length(aws_cloudfront_cache_policy.this) == 0
+    error_message = "No root resources when create is false, even with functions set."
   }
 }
 
