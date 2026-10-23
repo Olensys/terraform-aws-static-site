@@ -4,7 +4,7 @@ tier: capability          # primitive | capability | blueprint
 maturity: experimental    # experimental | stable | deprecated
 description: Static website on CloudFront with a private S3 origin behind Origin Access Control, HTTPS-only, SPA fallback
 owners: [platform]
-upstream: null            # e.g. "terraform-aws-modules/s3-bucket/aws 5.17.0"
-pairs_with: null          # e.g. "terraform-google-gcs-bucket"
+upstream: "terraform-aws-modules/cloudfront/aws 6.7.1 + terraform-aws-modules/s3-bucket/aws 5.17.0"
+pairs_with: terraform-google-https-lb
 registry_name: terraform-aws-static-site
 deprecated: null          # { removal: YYYY-MM-DD, replacement: <repo> }
