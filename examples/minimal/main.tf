@@ -1,3 +1,11 @@
+terraform {
+  required_version = ">= 1.5.0"
+
+  required_providers {
+    aws = { source = "hashicorp/aws", version = ">= 6.0, < 7.0" }
+  }
+}
+
 variable "domain_names" {
   description = "Domain names served by the site."
   type        = list(string)
