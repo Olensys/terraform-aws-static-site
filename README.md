@@ -19,20 +19,20 @@ Static website on CloudFront with a private S3 origin behind Origin Access Contr
 ## Usage
 
 ```hcl
-module "this" {
-  source = "git::https://github.com/Olensys/terraform-aws-static-site.git?ref=v1.0.0"
+module "naming" {
+  source  = "git::https://github.com/Olensys/terraform-null-naming.git?ref=v1.0.1"
+  context = var.context
+}
 
-  name = "example"
-  context = {
-    organization = "olensys"
-    environment  = "dev"
-    application  = "example"
-    owner        = "platform"
-    cost_center  = "eng"
-  }
+module "static_site" {
+  source  = "git::https://github.com/Olensys/terraform-aws-static-site.git?ref=v1.0.1"
+  name    = module.naming.name
+  context = var.context
 
   domain_names    = ["www.example.com"]
   certificate_arn = "arn:aws:acm:us-east-1:123456789012:certificate/00000000-0000-0000-0000-000000000000"
+
+  tags = module.naming.tags
 }
 ```
 
