@@ -15,6 +15,7 @@ Static website on CloudFront with a private S3 origin behind Origin Access Contr
 - The certificate must be in `us-east-1`: pass the `terraform-aws-acm-certificate` output, created with an aliased `us-east-1` provider.
 - The origin access control and the cache policy are both named `name`; CloudFront names these account-global, so `name` must be unique per account.
 - DNS is the consumer's job: point a CNAME for each of `domain_names` at the `domain_name` output with `terraform-cloudflare-dns` or Route53.
+- Integration: `examples/minimal` provisions its own us-east-1 certificate for `site.<zone_domain>`, validated through Cloudflare. Inputs are `TF_VAR_zone_id` and `TF_VAR_zone_domain` (default `tf-test.olensys.com`); `CLOUDFLARE_API_TOKEN` and `AWS_REGION` come from the environment.
 
 ## Usage
 
