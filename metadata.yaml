@@ -1,7 +1,7 @@
 name: terraform-aws-static-site
 cloud: aws          # aws | google | common
 tier: capability          # primitive | capability | blueprint
-maturity: experimental    # experimental | stable | deprecated
+maturity: stable          # experimental | stable | deprecated
 description: Static website on CloudFront with a private S3 origin behind Origin Access Control, HTTPS-only, SPA fallback
 owners: [platform]
 upstream: "terraform-aws-modules/cloudfront/aws 6.7.1 + terraform-aws-modules/s3-bucket/aws 5.17.0"
