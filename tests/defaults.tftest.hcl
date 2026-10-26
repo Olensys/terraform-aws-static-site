@@ -143,6 +143,20 @@ run "test_function_association" {
   }
 }
 
+run "test_response_headers_policy_accepted" {
+  # SMOKE: the policy id goes to the upstream module's default behaviour and is not visible here; asserts the input plans.
+  command = plan
+
+  variables {
+    response_headers_policy_id = "27d627a2-0f86-443d-a056-f328bf19733f"
+  }
+
+  assert {
+    condition     = output.viewer_protocol_policy == "redirect-to-https"
+    error_message = "A response headers policy id must plan cleanly."
+  }
+}
+
 run "test_create_false_passes_no_oac" {
   command = plan
 

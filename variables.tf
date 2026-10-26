@@ -105,6 +105,12 @@ variable "price_class" {
   }
 }
 
+variable "response_headers_policy_id" {
+  description = "ID of a CloudFront response headers policy attached to the default behaviour, for example one that adds CORS headers. Null attaches none."
+  type        = string
+  default     = null
+}
+
 variable "tags" {
   description = "Tags merged onto every taggable resource, applied last."
   type        = map(string)

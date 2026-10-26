@@ -11,6 +11,7 @@ Static website on CloudFront with a private S3 origin behind Origin Access Contr
 - `spa_fallback` (default true) maps 403 and 404 to `/index.html` with status 200 and a 10 second error cache.
 - A cache policy with the `cache_policy` TTLs (default 86400/31536000/0), gzip and brotli, and no cookies, headers or query strings in the cache key.
 - `functions` become published `cloudfront-js-2.0` functions, attached at most one per `viewer-request` or `viewer-response`.
+- `response_headers_policy_id` attaches an existing response headers policy (for example CORS) to the default behaviour; none by default.
 - `price_class` defaults to `PriceClass_100`; `web_acl_arn` and `logging_bucket` (bucket domain name) are optional.
 - The certificate must be in `us-east-1`: pass the `terraform-aws-acm-certificate` output, created with an aliased `us-east-1` provider.
 - The origin access control and the cache policy are both named `name`; CloudFront names these account-global, so `name` must be unique per account.

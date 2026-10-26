@@ -144,6 +144,8 @@ module "this" {
     compress               = true
     cache_policy_id        = var.create ? aws_cloudfront_cache_policy.this[0].id : null
 
+    response_headers_policy_id = var.response_headers_policy_id
+
     function_association = {
       for k, f in(var.create ? var.functions : {}) : f.event_type => {
         event_type   = f.event_type
