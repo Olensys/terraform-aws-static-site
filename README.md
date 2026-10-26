@@ -11,7 +11,7 @@ Static website on CloudFront with a private S3 origin behind Origin Access Contr
 - `spa_fallback` (default true) maps 403 and 404 to `/index.html` with status 200 and a 10 second error cache.
 - A cache policy with the `cache_policy` TTLs (default 86400/31536000/0), gzip and brotli, and no cookies, headers or query strings in the cache key.
 - `functions` become published `cloudfront-js-2.0` functions, attached at most one per `viewer-request` or `viewer-response`.
-- `price_class` defaults to `PriceClass_100`; `web_acl_arn` and `logging_bucket` (bucket domain name) are optional.
+- `price_class` defaults to `PriceClass_100`; `web_acl_arn`, `logging_bucket` (bucket domain name) and `response_headers_policy_id` (attached to the default cache behaviour, for example a CORS policy) are optional.
 - The certificate must be in `us-east-1`: pass the `terraform-aws-acm-certificate` output, created with an aliased `us-east-1` provider.
 - The origin access control and the cache policy are both named `name`; CloudFront names these account-global, so `name` must be unique per account.
 - DNS is the consumer's job: point a CNAME for each of `domain_names` at the `domain_name` output with `terraform-cloudflare-dns` or Route53.
@@ -80,6 +80,7 @@ module "static_site" {
 | <a name="input_functions"></a> [functions](#input\_functions) | CloudFront functions (cloudfront-js-2.0) keyed by short name; at most one per event\_type (viewer-request or viewer-response). | <pre>map(object({<br/>    event_type = string<br/>    code       = string<br/>  }))</pre> | `{}` | no |
 | <a name="input_logging_bucket"></a> [logging\_bucket](#input\_logging\_bucket) | S3 bucket domain name (for example logs.s3.amazonaws.com) for standard access logs, or null to disable logging. | `string` | `null` | no |
 | <a name="input_price_class"></a> [price\_class](#input\_price\_class) | CloudFront price class: PriceClass\_100, PriceClass\_200 or PriceClass\_All. | `string` | `"PriceClass_100"` | no |
+| <a name="input_response_headers_policy_id"></a> [response\_headers\_policy\_id](#input\_response\_headers\_policy\_id) | ID of a CloudFront response headers policy (for example CORS) to attach to the default cache behaviour, or null for none. | `string` | `null` | no |
 | <a name="input_spa_fallback"></a> [spa\_fallback](#input\_spa\_fallback) | Map 403 and 404 responses to /index.html with status 200 so client-side routing works. | `bool` | `true` | no |
 | <a name="input_tags"></a> [tags](#input\_tags) | Tags merged onto every taggable resource, applied last. | `map(string)` | `{}` | no |
 | <a name="input_web_acl_arn"></a> [web\_acl\_arn](#input\_web\_acl\_arn) | ARN of a WAFv2 web ACL (scope CLOUDFRONT) to attach, or null for none. | `string` | `null` | no |
