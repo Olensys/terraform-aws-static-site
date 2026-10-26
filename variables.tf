@@ -89,6 +89,12 @@ variable "web_acl_arn" {
   default     = null
 }
 
+variable "response_headers_policy_id" {
+  description = "ID of a CloudFront response headers policy (for example CORS) to attach to the default cache behaviour, or null for none."
+  type        = string
+  default     = null
+}
+
 variable "logging_bucket" {
   description = "S3 bucket domain name (for example logs.s3.amazonaws.com) for standard access logs, or null to disable logging."
   type        = string

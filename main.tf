@@ -137,12 +137,13 @@ module "this" {
   }
 
   default_cache_behavior = {
-    target_origin_id       = local.origin_id
-    viewer_protocol_policy = local.viewer_protocol_policy
-    allowed_methods        = ["GET", "HEAD", "OPTIONS"]
-    cached_methods         = ["GET", "HEAD"]
-    compress               = true
-    cache_policy_id        = var.create ? aws_cloudfront_cache_policy.this[0].id : null
+    target_origin_id           = local.origin_id
+    viewer_protocol_policy     = local.viewer_protocol_policy
+    allowed_methods            = ["GET", "HEAD", "OPTIONS"]
+    cached_methods             = ["GET", "HEAD"]
+    compress                   = true
+    cache_policy_id            = var.create ? aws_cloudfront_cache_policy.this[0].id : null
+    response_headers_policy_id = var.response_headers_policy_id
 
     response_headers_policy_id = var.response_headers_policy_id
 
