@@ -155,8 +155,10 @@ module "this" {
 
   custom_error_response = local.custom_error_responses
 
+  # CloudFront fixes the minimum protocol at TLSv1 for its default certificate.
   viewer_certificate = var.certificate_arn == null ? {
     cloudfront_default_certificate = true
+    minimum_protocol_version       = "TLSv1"
     } : {
     acm_certificate_arn      = var.certificate_arn
     ssl_support_method       = "sni-only"
