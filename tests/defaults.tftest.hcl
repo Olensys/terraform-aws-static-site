@@ -194,14 +194,28 @@ run "test_function_event_type_validation" {
   expect_failures = [var.functions]
 }
 
-run "test_domain_names_validation" {
+run "test_domain_names_need_certificate" {
   command = plan
 
   variables {
-    domain_names = []
+    certificate_arn = null
   }
 
   expect_failures = [var.domain_names]
+}
+
+run "test_default_certificate_without_domain" {
+  command = plan
+
+  variables {
+    domain_names    = []
+    certificate_arn = null
+  }
+
+  assert {
+    condition     = output.name == "example"
+    error_message = "The site must plan with the default CloudFront certificate."
+  }
 }
 
 run "test_tags_contract" {

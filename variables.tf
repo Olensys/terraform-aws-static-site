@@ -31,17 +31,19 @@ variable "create" {
 }
 
 variable "domain_names" {
-  description = "Alternate domain names (CNAMEs) served by the distribution. Must be covered by the certificate."
+  description = "Alternate domain names (CNAMEs) served by the distribution. Must be covered by the certificate. Empty serves the site on the distribution's own domain with the default CloudFront certificate."
   type        = list(string)
+  default     = []
   validation {
-    condition     = length(var.domain_names) > 0
-    error_message = "domain_names must contain at least one domain."
+    condition     = length(var.domain_names) == 0 || var.certificate_arn != null
+    error_message = "certificate_arn is required when domain_names is set."
   }
 }
 
 variable "certificate_arn" {
-  description = "ARN of the ACM certificate for domain_names. Must be issued in us-east-1."
+  description = "ARN of the ACM certificate for domain_names. Must be issued in us-east-1. Null uses the default CloudFront certificate."
   type        = string
+  default     = null
 }
 
 variable "default_root_object" {

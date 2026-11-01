@@ -12,7 +12,7 @@ Static website on CloudFront with a private S3 origin behind Origin Access Contr
 - A cache policy with the `cache_policy` TTLs (default 86400/31536000/0), gzip and brotli, and no cookies, headers or query strings in the cache key.
 - `functions` become published `cloudfront-js-2.0` functions, attached at most one per `viewer-request` or `viewer-response`.
 - `price_class` defaults to `PriceClass_100`; `web_acl_arn`, `logging_bucket` (bucket domain name) and `response_headers_policy_id` (attached to the default cache behaviour, for example a CORS policy) are optional.
-- The certificate must be in `us-east-1`: pass the `terraform-aws-acm-certificate` output, created with an aliased `us-east-1` provider.
+- The certificate must be in `us-east-1`: pass the `terraform-aws-acm-certificate` output, created with an aliased `us-east-1` provider. Without `domain_names` and `certificate_arn` the site is served on the distribution's own domain with the default CloudFront certificate.
 - The origin access control and the cache policy are both named `name`; CloudFront names these account-global, so `name` must be unique per account.
 - DNS is the consumer's job: point a CNAME for each of `domain_names` at the `domain_name` output with `terraform-cloudflare-dns` or Route53.
 - Integration: `examples/minimal` provisions its own us-east-1 certificate for `site.<zone_domain>`, validated through Cloudflare. Inputs are `TF_VAR_zone_id` and `TF_VAR_zone_domain` (default `tf-test.olensys.com`); `CLOUDFLARE_API_TOKEN` and `AWS_REGION` come from the environment.
@@ -70,13 +70,13 @@ module "static_site" {
 
 | Name | Description | Type | Default | Required |
 | ---- | ----------- | ---- | ------- | :------: |
-| <a name="input_certificate_arn"></a> [certificate\_arn](#input\_certificate\_arn) | ARN of the ACM certificate for domain\_names. Must be issued in us-east-1. | `string` | n/a | yes |
 | <a name="input_context"></a> [context](#input\_context) | Deployment context used for naming, tagging and environment-dependent defaults. | <pre>object({<br/>    organization = string<br/>    environment  = string<br/>    application  = string<br/>    component    = optional(string)<br/>    owner        = string<br/>    cost_center  = string<br/>    extra_tags   = optional(map(string), {})<br/>  })</pre> | n/a | yes |
-| <a name="input_domain_names"></a> [domain\_names](#input\_domain\_names) | Alternate domain names (CNAMEs) served by the distribution. Must be covered by the certificate. | `list(string)` | n/a | yes |
 | <a name="input_name"></a> [name](#input\_name) | Resource name. Lowercase letters, digits and hyphens. | `string` | n/a | yes |
 | <a name="input_cache_policy"></a> [cache\_policy](#input\_cache\_policy) | TTLs in seconds for the cache policy. No cookies, headers or query strings are forwarded. | <pre>object({<br/>    default_ttl = optional(number, 86400)<br/>    max_ttl     = optional(number, 31536000)<br/>    min_ttl     = optional(number, 0)<br/>  })</pre> | `{}` | no |
+| <a name="input_certificate_arn"></a> [certificate\_arn](#input\_certificate\_arn) | ARN of the ACM certificate for domain\_names. Must be issued in us-east-1. Null uses the default CloudFront certificate. | `string` | `null` | no |
 | <a name="input_create"></a> [create](#input\_create) | Whether to create any resources. Set false to create nothing. | `bool` | `true` | no |
 | <a name="input_default_root_object"></a> [default\_root\_object](#input\_default\_root\_object) | Object CloudFront returns for requests to the root URL. | `string` | `"index.html"` | no |
+| <a name="input_domain_names"></a> [domain\_names](#input\_domain\_names) | Alternate domain names (CNAMEs) served by the distribution. Must be covered by the certificate. Empty serves the site on the distribution's own domain with the default CloudFront certificate. | `list(string)` | `[]` | no |
 | <a name="input_functions"></a> [functions](#input\_functions) | CloudFront functions (cloudfront-js-2.0) keyed by short name; at most one per event\_type (viewer-request or viewer-response). | <pre>map(object({<br/>    event_type = string<br/>    code       = string<br/>  }))</pre> | `{}` | no |
 | <a name="input_logging_bucket"></a> [logging\_bucket](#input\_logging\_bucket) | S3 bucket domain name (for example logs.s3.amazonaws.com) for standard access logs, or null to disable logging. | `string` | `null` | no |
 | <a name="input_price_class"></a> [price\_class](#input\_price\_class) | CloudFront price class: PriceClass\_100, PriceClass\_200 or PriceClass\_All. | `string` | `"PriceClass_100"` | no |
