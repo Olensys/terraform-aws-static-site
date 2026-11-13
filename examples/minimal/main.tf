@@ -59,10 +59,13 @@ resource "aws_acm_certificate_validation" "site" {
   validation_record_fqdns = [cloudflare_dns_record.validation.name]
 }
 
-module "this" {
-  source = "../../"
+module "naming" {
+  source = "git::https://github.com/Olensys/terraform-null-naming.git?ref=v1.0.1"
 
-  name = "olensys-test-site"
+  context = local.context
+}
+
+locals {
   context = {
     organization = "olensys"
     environment  = "test"
@@ -70,6 +73,14 @@ module "this" {
     owner        = "platform"
     cost_center  = "eng"
   }
+}
+
+module "this" {
+  source = "../../"
+
+  name    = module.naming.name
+  context = local.context
+  tags    = module.naming.tags
 
   domain_names    = ["site.${var.zone_domain}"]
   certificate_arn = aws_acm_certificate_validation.site.certificate_arn
