@@ -201,7 +201,7 @@ run "test_domain_names_need_certificate" {
     certificate_arn = null
   }
 
-  expect_failures = [var.domain_names]
+  expect_failures = [output.id]
 }
 
 run "test_default_certificate_without_domain" {

@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.1.0
+
+### Behaviour changes
+
+`domain_names` and `certificate_arn` are now optional (defaults `[]` and `null`). An empty `domain_names` no longer fails validation: it now yields a site served on the distribution's own `*.cloudfront.net` domain with the default CloudFront certificate, whose minimum TLS protocol CloudFront fixes at `TLSv1`. Setting `domain_names` without `certificate_arn` still fails, now through a precondition on the `id` output instead of a variable validation. Behaviour with a domain and a certificate is unchanged.
+
 ## [1.0.5](https://github.com/Olensys/terraform-aws-static-site/compare/v1.0.4...v1.0.5) (2026-11-14)
 
 

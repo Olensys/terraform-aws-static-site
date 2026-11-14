@@ -34,14 +34,10 @@ variable "domain_names" {
   description = "Alternate domain names (CNAMEs) served by the distribution. Must be covered by the certificate. Empty serves the site on the distribution's own domain with the default CloudFront certificate."
   type        = list(string)
   default     = []
-  validation {
-    condition     = length(var.domain_names) == 0 || var.certificate_arn != null
-    error_message = "certificate_arn is required when domain_names is set."
-  }
 }
 
 variable "certificate_arn" {
-  description = "ARN of the ACM certificate for domain_names. Must be issued in us-east-1. Null uses the default CloudFront certificate."
+  description = "ARN of the ACM certificate for domain_names. Must be issued in us-east-1. Required when domain_names is set (checked on the id output). Null uses the default CloudFront certificate. Setting it with an empty domain_names is accepted: the certificate is attached but no alias uses it."
   type        = string
   default     = null
 }

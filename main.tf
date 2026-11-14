@@ -156,13 +156,17 @@ module "this" {
   custom_error_response = local.custom_error_responses
 
   # CloudFront fixes the minimum protocol at TLSv1 for its default certificate.
+  # Both branches carry the same keys so the conditional type-checks on every supported Terraform version.
   viewer_certificate = var.certificate_arn == null ? {
     cloudfront_default_certificate = true
+    acm_certificate_arn            = null
+    ssl_support_method             = null
     minimum_protocol_version       = "TLSv1"
     } : {
-    acm_certificate_arn      = var.certificate_arn
-    ssl_support_method       = "sni-only"
-    minimum_protocol_version = "TLSv1.2_2021"
+    cloudfront_default_certificate = null
+    acm_certificate_arn            = var.certificate_arn
+    ssl_support_method             = "sni-only"
+    minimum_protocol_version       = "TLSv1.2_2021"
   }
 
   logging_config = var.logging_bucket == null ? null : {

@@ -1,6 +1,11 @@
 output "id" {
   description = "ID of the CloudFront distribution. Null when create is false."
   value       = var.create ? module.this.cloudfront_distribution_id : null
+
+  precondition {
+    condition     = !var.create || length(var.domain_names) == 0 || var.certificate_arn != null
+    error_message = "certificate_arn is required when domain_names is set."
+  }
 }
 
 output "name" {
