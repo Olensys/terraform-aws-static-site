@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.0.5](https://github.com/Olensys/terraform-aws-static-site/compare/v1.0.4...v1.0.5) (2026-11-14)
+
+
+### Bug Fixes
+
+* tag the examples' resources through the naming module ([#10](https://github.com/Olensys/terraform-aws-static-site/issues/10)) ([3c1fbdc](https://github.com/Olensys/terraform-aws-static-site/commit/3c1fbdcd6cd2c548a0a781b1fc2f0bc6b7c0b6a4))
+
 ## [1.0.4](https://github.com/Olensys/terraform-aws-static-site/compare/v1.0.3...v1.0.4) (2026-10-26)
 
 
