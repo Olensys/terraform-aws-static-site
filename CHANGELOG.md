@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.1.0](https://github.com/Olensys/terraform-aws-static-site/compare/v1.0.5...v1.1.0) (2026-11-14)
+
+
+### Features
+
+* serve on the default CloudFront certificate when no domain is set ([#9](https://github.com/Olensys/terraform-aws-static-site/issues/9)) ([8d196ce](https://github.com/Olensys/terraform-aws-static-site/commit/8d196ce8a6184374ed236d7606fb53fb4fbd0995))
+
 ## 1.1.0
 
 ### Behaviour changes
